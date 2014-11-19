@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# Built from perl.t template
 # purpose: [< $purpose >]
 
 use 5.16.0;
