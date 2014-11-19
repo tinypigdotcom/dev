@@ -1,6 +1,8 @@
 #!/bin/bash
+# Built from sh.t template
 # purpose: [< $purpose >]
 
+[< $top_comments_block >]
 VERSION=[< $VERSION >]
 PROG=`basename $0`
 ERR_EXIT=2
