@@ -2,6 +2,7 @@
 # Built from sh.t template
 # purpose: [< $purpose >]
 
+[< $LICENSE >]
 [< $top_comments_block >]
 VERSION=[< $VERSION >]
 PROG=`basename $0`
@@ -73,7 +74,6 @@ for (@options) {
     my $var = 'OPT_' . uc($_->{varname});
     $out .= "$var=$_->{init}\n";
 }
-'';
 $single_keys='';
 @long_opts=();
 for (@options) {
