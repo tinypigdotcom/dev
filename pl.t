@@ -2,6 +2,7 @@
 # Built from perl.t template
 # purpose: [< $purpose >]
 
+[< $LICENSE >]
 [< $top_comments_block >]
 use 5.16.0;
 use warnings FATAL => 'all';
