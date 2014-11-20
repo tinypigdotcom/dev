@@ -94,7 +94,7 @@ if ( $vars{target} ) {
 }
 
 my $ofh = IO::File->new($outfile, '>');
-die if (!defined $ofh);
+die "can't create $outfile: $!" if (!defined $ofh);
 
 print $ofh "$result";
 $ofh->close;
