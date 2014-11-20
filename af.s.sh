@@ -2,10 +2,10 @@
 # <- my $code = <<'END_OF_CODE';
 
 if [ "$#" -lt 1 ]; then
-    do_short_usage
+    u_do_short_usage
 fi
 
-cd /www
+cd ${AF_DIR} || exit
 b=-1
 while read a
 do
@@ -28,7 +28,7 @@ read key index
 f $key ${file[$index]}
 # <- END_OF_CODE
 # <- $VAR1 = {
-# <-     VERSION => '0.0.6',
+# <-     VERSION => '0.0.7',
 # <-     purpose => 'Search for a file and add it to the current "p" project.',
 # <-     params  => 'FILENAME_PART',
 # <-     example => 'menu.h',
