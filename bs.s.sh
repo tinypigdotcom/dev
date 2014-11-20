@@ -7,12 +7,12 @@
 # <- my $code = <<'END_OF_CODE';
 
 if [ "$#" -lt 1 ]; then
-    do_short_usage
+    u_do_short_usage
 fi
 
 FILE=$1
 if [ ! -f "$FILE" ]; then
-    errout "File \"$FILE\" not found."
+    u_errout "File \"$FILE\" not found."
 fi
 
 DIR=`dirname $FILE`
@@ -33,7 +33,7 @@ git push origin master 2>/dev/null
 
 # <- END_OF_CODE
 # <- $VAR1 = {
-# <-     VERSION            => '1.0.5',
+# <-     VERSION            => '1.0.6',
 # <-     purpose            => 'to quickly back up a script version into ~/archive via git',
 # <-     params             => 'FILE',
 # <-     example            => 'menu.h',
