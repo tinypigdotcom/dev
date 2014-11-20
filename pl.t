@@ -36,11 +36,13 @@ unshift @options,
     long_switch => 'help',
     short_desc  => 'help',
     long_desc   => 'display this help text and exit',
+    init        => '0',
 },
 {
     long_switch => 'version',
     short_desc  => 'version',
     long_desc   => 'display version information and exit',
+    init        => '0',
 };
 for (@options) {
     my $len = length $_->{short_desc};
@@ -74,10 +76,11 @@ sub version {
     return;
 }
 
-my $h       = 0;
-my $help    = 0;
-my $version = 0;
-[< $INIT >]
+[< my $fmt = $sl + 2;
+$OUT .= sprintf("my %-${fmt}s = 0;\n", "\$h");
+for (@options) {
+    $OUT .= sprintf("my %-${fmt}s = $_->{init};\n", "\$$_->{varname}");
+}>]
 
 Getopt::Long::Configure ("bundling");
 
