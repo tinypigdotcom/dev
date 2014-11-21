@@ -31,24 +31,26 @@ sub errout {
     exit $ERR_EXIT;
 }
 
-[< $sl=0;
-unshift @options,
-{
-    long_switch => 'help',
-    short_desc  => 'help',
-    long_desc   => 'display this help text and exit',
-    init        => '0',
-},
-{
-    long_switch => 'version',
-    short_desc  => 'version',
-    long_desc   => 'display version information and exit',
-    init        => '0',
-};
-for (@options) {
-    my $len = length $_->{short_desc};
-    $sl = $len if $len > $sl;
-} >]
+[<
+    $switch_max_len=0;
+    unshift @options,
+    {
+        long_switch => 'help',
+        short_desc  => 'help',
+        long_desc   => 'display this help text and exit',
+        init        => '0',
+    },
+    {
+        long_switch => 'version',
+        short_desc  => 'version',
+        long_desc   => 'display version information and exit',
+        init        => '0',
+    };
+    for (@options) {
+        my $len = length $_->{short_desc};
+        $switch_max_len = $len if $len > $switch_max_len;
+    }
+>]
 
 sub usage {
     usage_top();
@@ -56,13 +58,15 @@ sub usage {
 [< $purpose >]
 Example: $PROG [< $example >]
 
-[< for (@options) {
-    my $ff = substr $_->{long_switch}, 0, 1;
-    $_->{one_key} = $ff;
-    $_->{varname} = $_->{long_switch};
-    $_->{varname} =~ s/\W.*//; # turn backdate=i into backdate
-    $OUT .= sprintf(" %3s, --%-${sl}s $_->{long_desc}\n", "-$ff", $_->{short_desc});
-} >]
+[<
+    for (@options) {
+        my $ff = substr $_->{long_switch}, 0, 1;
+        $_->{one_key} = $ff;
+        $_->{varname} = $_->{long_switch};
+        $_->{varname} =~ s/\W.*//; # turn backdate=i into backdate
+        $OUT .= sprintf(" %3s, --%-${switch_max_len}s $_->{long_desc}\n", "-$ff", $_->{short_desc});
+    }
+>]
 EOF
     return;
 }
@@ -77,18 +81,22 @@ sub version {
     return;
 }
 
-[< my $fmt = $sl + 2;
-$OUT .= sprintf("my %-${fmt}s = 0;\n", "\$h");
-for (@options) {
-    $OUT .= sprintf("my %-${fmt}s = $_->{init};\n", "\$$_->{varname}");
-}>]
+[<
+    my $fmt = $switch_max_len + 2;
+    $OUT .= sprintf("my %-${fmt}s = 0;\n", "\$h");
+    for (@options) {
+        $OUT .= sprintf("my %-${fmt}s = $_->{init};\n", "\$$_->{varname}");
+    }
+>]
 
 Getopt::Long::Configure ("bundling");
 
 my %options = (
-[< for (@options) {
-    $OUT .= sprintf("    \"%-${sl}s => \\\$$_->{varname},\n", "$_->{long_switch}\"");
-} >]
+[<
+    for (@options) {
+        $OUT .= sprintf("    \"%-${switch_max_len}s => \\\$$_->{varname},\n", "$_->{long_switch}\"");
+    }
+>]
 );
 
 # Explicitly add single letter version of each option to allow bundling
