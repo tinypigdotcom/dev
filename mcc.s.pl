@@ -8,6 +8,17 @@ use Data::Dumper;
 use IO::File;
 use Text::Template;
 
+my $error = '';
+
+sub my_broken {
+   my %args = @_;
+   my $err_ref = $args{arg};
+   my $error = $args{error};
+   chomp $error;
+   $$err_ref = "ERROR: $error in:\n$args{text}";
+   return undef;
+}
+
 my $ext;
 
 if ( !@ARGV ) {
@@ -68,7 +79,15 @@ my $license_template = Text::Template->new(
 my $year = sprintf("%04s",(localtime(time))[5] + 1900);
 my %license_vars = ( year => $year );
 
-my $license_result = $license_template->fill_in(HASH => \%license_vars);
+my $license_result = $license_template->fill_in(
+    BROKEN     => \&my_broken,
+    BROKEN_ARG => \$error,
+    HASH    => \%license_vars,
+);
+
+if ($error) {
+    die "$error\n";
+}
 
 if (! defined $license_result) {
     die "Couldn't fill in license template: $Text::Template::ERROR";
@@ -83,7 +102,21 @@ dump_read();
 my %vars = %$VAR1;
 $vars{LICENSE}=$license_result;
 
-my $result = $template->fill_in(HASH => \%vars);
+my $result = $template->fill_in(
+     BROKEN     => \&my_broken,
+     BROKEN_ARG => \$error,
+     PREPEND    => q{
+         use strict;
+         use vars qw( $PROG $purpose $LICENSE $VERSION $params $example
+         $CODE $long_opts $out $single_keys $switch_max_len $top_comments_block
+         @long_opts @options );
+     },
+    HASH => \%vars,
+);
+
+if ($error) {
+    die "$error\n";
+}
 
 if (! defined $result) {
     die "Couldn't fill in template: $Text::Template::ERROR";
@@ -108,6 +141,6 @@ my $mode = 0700; chmod $mode, $outfile;
 # <-     purpose => 'build programs from template',
 # <-     example => 'spiffy.s.pl',
 # <-     CODE    => $code,
-# <-     target  => "$ENV{HOME}/bin/mcc",
+# <-     target  => "mcc",
 # <- };
 
