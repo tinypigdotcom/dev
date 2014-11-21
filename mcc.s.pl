@@ -137,7 +137,7 @@ my $mode = 0700; chmod $mode, $outfile;
 # <- END_OF_CODE
 
 # <- $VAR1 = {
-# <-     VERSION => '0.0.2',
+# <-     VERSION => '0.0.3',
 # <-     purpose => 'build programs from template',
 # <-     example => 'spiffy.s.pl',
 # <-     CODE    => $code,
