@@ -50,6 +50,7 @@ sub errout {
         my $len = length $_->{short_desc};
         $switch_max_len = $len if $len > $switch_max_len;
     }
+    return;
 >]
 
 sub usage {
@@ -66,6 +67,7 @@ Example: $PROG [< $example >]
         $_->{varname} =~ s/\W.*//; # turn backdate=i into backdate
         $OUT .= sprintf(" %3s, --%-${switch_max_len}s $_->{long_desc}\n", "-$ff", $_->{short_desc});
     }
+    return;
 >]
 EOF
     return;
@@ -87,6 +89,7 @@ sub version {
     for (@options) {
         $OUT .= sprintf("my %-${fmt}s = $_->{init};\n", "\$$_->{varname}");
     }
+    return;
 >]
 
 Getopt::Long::Configure ("bundling");
@@ -96,6 +99,7 @@ my %options = (
     for (@options) {
         $OUT .= sprintf("    \"%-${switch_max_len}s => \\\$$_->{varname},\n", "$_->{long_switch}\"");
     }
+    return;
 >]
 );
 
