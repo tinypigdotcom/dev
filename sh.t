@@ -4,6 +4,33 @@
 [< $exit ||= 'exit'; '' >]
 [< $LICENSE >]
 [< $top_comments_block >]
+[<
+    $switch_max_len=0;
+    unshift @options,
+    {
+        long_switch => 'help',
+        short_desc  => 'help',
+        long_desc   => 'display this help text and exit',
+        init        => '0',
+        skip_case   => 1,
+    },
+    {
+        long_switch => 'version',
+        short_desc  => 'version',
+        long_desc   => 'display version information and exit',
+        init        => '0',
+        skip_case   => 1,
+    };
+    for (@options) {
+        my $len = length $_->{short_desc};
+        $switch_max_len = $len if $len > $switch_max_len;
+        my $ff = substr $_->{long_switch}, 0, 1;
+        $_->{one_key} = $ff;
+        $_->{varname} = $_->{long_switch};
+        $_->{varname} =~ s/\W.*//; # turn backdate=i into backdate
+    }
+    return;
+>]
 
 u_do_init() {
     u_VERSION=[< $VERSION >]
@@ -19,7 +46,14 @@ u_do_cleanup() {
     unset u_ERR_EXIT
     unset u_EXIT_STATUS
     unset u_OPTS
-    unset FIXMEEEEEEEE_u_OPT_
+[<
+    for (@options) {
+        next if $_->{skip_case};
+        my $var = 'u_OPT_' . uc($_->{varname});
+        $OUT .= "    unset $var\n"
+    }
+    return;
+>]
 
     unset -f u_do_cleanup
     unset -f u_do_exit
@@ -56,44 +90,16 @@ u_errout() {
 
 u_do_init
 
-[<
-$switch_max_len=0;
-unshift @options,
-{
-    long_switch => 'help',
-    short_desc  => 'help',
-    long_desc   => 'display this help text and exit',
-    init        => '0',
-    skip_case   => 1,
-},
-{
-    long_switch => 'version',
-    short_desc  => 'version',
-    long_desc   => 'display version information and exit',
-    init        => '0',
-    skip_case   => 1,
-};
-for (@options) {
-    my $len = length $_->{short_desc};
-    $switch_max_len = $len if $len > $switch_max_len;
-}
-return;
->]
-
 u_usage() {
 
     u_usage_top
     cat <<EOF_usage >&2
 [< $purpose >]
-Example: $PROG [< $example >]
+Example: $u_PROG [< $example >]
 
 [<
     for (@options) {
-        my $ff = substr $_->{long_switch}, 0, 1;
-        $_->{one_key} = $ff;
-        $_->{varname} = $_->{long_switch};
-        $_->{varname} =~ s/\W.*//; # turn backdate=i into backdate
-        $OUT .= sprintf(" %3s, --%-${switch_max_len}s  $_->{long_desc}\n", "-$ff", $_->{short_desc});
+        $OUT .= sprintf(" %3s, --%-${switch_max_len}s  $_->{long_desc}\n", "-$_->{one_key}", $_->{short_desc});
     }
     return;
 >]
@@ -158,7 +164,7 @@ do
         my $var = 'u_OPT_' . uc($_->{varname});
         my $ext = '';
         if ( $_->{has_arg} ) {
-            $ext = "; ${var}_ARG=$2; shift";
+            $ext = "; ${var}_ARG=\$2; shift";
         }
         $OUT .= sprintf(" %17s $var=1$ext\n", "-$_->{one_key} | --$_->{varname})");
         $OUT .= "                   ;;\n";
