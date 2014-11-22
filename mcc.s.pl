@@ -80,9 +80,13 @@ my $year = sprintf("%04s",(localtime(time))[5] + 1900);
 my %license_vars = ( year => $year );
 
 my $license_result = $license_template->fill_in(
+    PREPEND    => q{
+        use strict;
+        use vars qw( $year );
+    },
     BROKEN     => \&my_broken,
     BROKEN_ARG => \$error,
-    HASH    => \%license_vars,
+    HASH       => \%license_vars,
 );
 
 if ($error) {
@@ -137,7 +141,7 @@ my $mode = 0700; chmod $mode, $outfile;
 # <- END_OF_CODE
 
 # <- $VAR1 = {
-# <-     VERSION => '0.0.3',
+# <-     VERSION => '0.0.4',
 # <-     purpose => 'build programs from template',
 # <-     example => 'spiffy.s.pl',
 # <-     CODE    => $code,
