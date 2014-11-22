@@ -35,7 +35,6 @@ u_HERE_DIRS="
 "
 
 # -------------------------- Setup -------------------------------------------
-u_PROG=c
 u_lookup=$1
 shift
 
@@ -115,7 +114,7 @@ unset u_PROG
 
 # <- END_OF_CODE
 # <- $VAR1 = {
-# <-     VERSION => '0.1.3',
+# <-     VERSION => '0.1.4',
 # <-     PROG    => 'c',
 # <-     purpose => 'shorcut script for easy change directory',
 # <-     params  => 'shortcut',
