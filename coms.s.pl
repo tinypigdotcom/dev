@@ -4,6 +4,8 @@
 # TODO
 # * create tests which could fix dumb errors
 
+use strict;
+
 package ComsScript {
     use Carp;
     use Data::Dumper;
@@ -116,7 +118,7 @@ exit $app->run(@ARGV);
 
 # <- END_OF_CODE
 # <- $VAR1 = {
-# <-     VERSION => '0.1.4',
+# <-     VERSION => '0.1.5',
 # <-     purpose => 'list all personal commands on this system',
 # <-     example => '',
 # <-     CODE    => $code,
