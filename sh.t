@@ -77,6 +77,7 @@ for (@options) {
     my $len = length $_->{short_desc};
     $switch_max_len = $len if $len > $switch_max_len;
 }
+return;
 >]
 
 u_usage() {
@@ -94,6 +95,7 @@ Example: $PROG [< $example >]
         $_->{varname} =~ s/\W.*//; # turn backdate=i into backdate
         $OUT .= sprintf(" %3s, --%-${switch_max_len}s  $_->{long_desc}\n", "-$ff", $_->{short_desc});
     }
+    return;
 >]
 EOF_usage
 
@@ -126,7 +128,7 @@ u_version() {
         push @long_opts, $_->{long_switch};
     }
     $long_opts = join ',', @long_opts;
-    return '';
+    return;
 >]
 
 u_OPTS=`getopt -o [< $single_keys >] -l '[< $long_opts >]' -- "$@"`
@@ -161,8 +163,8 @@ do
         $OUT .= sprintf(" %17s $var=1$ext\n", "-$_->{one_key} | --$_->{varname})");
         $OUT .= "                   ;;\n";
     }
+    return;
 >]
-
                --) shift
                    break
                    ;;
