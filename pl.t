@@ -16,7 +16,7 @@ my $PROG = basename($0);
 my $ERR_EXIT = 2;
 
 sub usage_top {
-    warn "Usage: $PROG [OPTION]...\n";
+    warn "Usage: $PROG [< $params >]\n";
 }
 
 sub short_usage {
