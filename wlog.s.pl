@@ -13,20 +13,18 @@ my $dfd = DateTime::Format::Duration->new(
     pattern   => '%H:%M:%S',
     normalize => 1
 );
-my $mdy;
+my $mdy = '';
 
-my $backday = 0;
+my $yesterday; #->
+my $backdate;  #->
 
-if ( $ARGV[0] =~ /^-(.*)/ ) {
-    $backday = $1;
-    if ( $backday eq 'y' ) {
-        $backday = 1;
-    }
+if ( $yesterday ) {
+    $backdate = 1;
 }
 
 my $today = DateTime->now( time_zone => 'local' )->set_time_zone('floating')
-  ->subtract( days => $backday );
-if ($backday) {
+  ->subtract( days => $backdate );
+if ($backdate) {
     $today->set_hour(18);
     $today->set_minute(0);
     $today->set_second(0);
@@ -160,11 +158,25 @@ sub output {
 # <- END_OF_CODE
 
 # <- $VAR1 = {
-# <-     VERSION => '1.13',
+# <-     VERSION => '1.14',
 # <-     purpose => 'print time card',
 # <-     params  => '',
 # <-     example => '',
 # <-     CODE    => $code,
 # <-     target  => "$ENV{HOME}/bin/wlog",
+# <-     options => [
+# <-         {
+# <-             long_switch => 'backdate=i',
+# <-             short_desc  => 'backdate=#DAYS',
+# <-             long_desc   => 'edit # days ago instead of today',
+# <-             init        => '0',
+# <-         },
+# <-         {
+# <-             long_switch => 'yesterday',
+# <-             short_desc  => 'yesterday',
+# <-             long_desc   => "edit yesterday's data instead of today's",
+# <-             init        => '0',
+# <-         },
+# <-     ],
 # <- };
 
