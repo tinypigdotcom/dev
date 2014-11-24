@@ -21,11 +21,13 @@ print "replace this with code";
 # <-             long_switch => 'backdate=i',
 # <-              short_desc => 'backdate=#DAYS',
 # <-               long_desc => 'edit # days ago instead of today',
+# <-                    init => '0',
 # <-         },
 # <-         {
 # <-             long_switch => 'yesterday',
 # <-              short_desc => 'yesterday',
 # <-               long_desc => "edit yesterday's data instead of today's",
+# <-                    init => '0',
 # <-         },
 # <-     ],
 # <- };
