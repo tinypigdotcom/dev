@@ -21,10 +21,6 @@
 # <- END_OF_COMMENTS
 
 # <- my $code = <<'END_OF_CODE';
-if [ "$#" -lt 1 ]; then
-    u_do_short_usage
-    return $ERR_EXIT
-fi
 
 # -------------------------- Data: map u_option letter to its associated command
 u_HERE_DIRS="
@@ -114,7 +110,7 @@ unset u_PROG
 
 # <- END_OF_CODE
 # <- $VAR1 = {
-# <-     VERSION => '0.1.4',
+# <-     VERSION => '0.1.5',
 # <-     PROG    => 'c',
 # <-     purpose => 'shorcut script for easy change directory',
 # <-     params  => 'shortcut',
