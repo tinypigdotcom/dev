@@ -5,7 +5,12 @@ if [ "$#" -lt 1 ]; then
     u_do_short_usage
 fi
 
-cd ${AF_DIR} || exit
+DIR=$AF_DIR
+if [ -z "$DIR" ]; then
+    DIR=$HOME
+fi
+
+cd ${DIR} || exit
 b=-1
 while read a
 do
@@ -28,7 +33,7 @@ read key index
 f $key ${file[$index]}
 # <- END_OF_CODE
 # <- $VAR1 = {
-# <-     VERSION => '0.0.7',
+# <-     VERSION => '0.0.8',
 # <-     purpose => 'Search for a file and add it to the current "p" project.',
 # <-     params  => 'FILENAME_PART',
 # <-     example => 'menu.h',
