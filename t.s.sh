@@ -54,7 +54,7 @@ shift
 
 # -------------------------- Display usage function --------------------------
 usage() {
-    echo "Usage: $ $PROG n" >&2
+    echo "Usage: $ $u_PROG n" >&2
     echo "where n is one of:" >&2
     i=0
     while [  $i -lt ${#option[@]} ]; do

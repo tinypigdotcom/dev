@@ -17,22 +17,22 @@ shift
 # -------------------------- Create or read other commands from config file --
 if [ "x$HOME" != "x" ]; then
     UTILITY_DIR=$HOME/.utility
-    CONFIG=$UTILITY_DIR/$PROG
+    CONFIG=$UTILITY_DIR/$u_PROG
     if [ ! -d "$UTILITY_DIR" ]; then
         mkdir $UTILITY_DIR
     fi
     if [ ! -f "$CONFIG" ]; then
-        echo "# example config for $PROG script" >$CONFIG
+        echo "# example config for $u_PROG script" >$CONFIG
         echo "$A" | sed -e 's/^/#/' >>$CONFIG
     fi
     if [ -r "$CONFIG" ]; then
-        B=`grep -v '^ *#' $HOME/.utility/$PROG 2>/dev/null`
+        B=`grep -v '^ *#' $HOME/.utility/$u_PROG 2>/dev/null`
     fi
 fi
 
 # -------------------------- Display usage function --------------------------
 usage() {
-    echo "Usage: $ $PROG n" >&2
+    echo "Usage: $ $u_PROG n" >&2
     echo "where n is one of:" >&2
     i=0
     while [  $i -lt ${#option[@]} ]; do
