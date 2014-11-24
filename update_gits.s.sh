@@ -116,9 +116,9 @@ echo
 
 # <- END_OF_CODE
 # <- $VAR1 = {
-# <-     VERSION => '1.0.9',
+# <-     VERSION => '1.1.0',
 # <-     purpose => 'update all git directories on this system',
-# <-     params  => '-r',
+# <-     params => '[OPTION]...',
 # <-     example => '-r',
 # <-     CODE    => $code,
 # <-     target  => "$ENV{HOME}/bin/update_gits",
