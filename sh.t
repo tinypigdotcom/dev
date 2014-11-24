@@ -98,8 +98,49 @@ u_usage() {
 Example: $u_PROG [< $example >]
 
 [<
+    sub word_wrap {
+        my ($maxlen,$text) = @_;
+
+        for ($text) {
+            s/^\s*//;
+            s/\s*$//;
+        }
+        my @words = split /\s+/, $text;
+        my @output;
+        my $line = '';
+        my $space = '';
+        for ( @words ) {
+            if ( length("$line $_") > $maxlen ) {
+                push @output, $line;
+                $line = $_;
+            }
+            else {
+                $line .= "$space$_";
+            }
+            $space = ' ';
+        }
+        push @output, $line;
+        return @output;
+    }
+
     for (@options) {
-        $OUT .= sprintf(" %3s, --%-${switch_max_len}s  $_->{long_desc}\n", "-$_->{one_key}", $_->{short_desc});
+        $_->{varname} = $_->{var} || $_->{long_switch};
+        $_->{varname} =~ s/\W.*//; # turn backdate=i into backdate
+        my $ls = 3;
+        my $lx = $switch_max_len;
+        my $firstline = sprintf(" %${ls}s, --%-${lx}s ", "-$_->{one_key}", $_->{short_desc});
+        my $maxlen = 79;
+        my $used = $ls + $lx + 6;
+        my $tot = $maxlen - $used;
+        my $spc = ' ' x $used;
+
+        my @lines = word_wrap($tot, $_->{long_desc});
+
+        my $pre = $firstline;
+        for ( @lines ) {
+            $OUT .= "${pre}$_\n";
+            $pre = $spc;
+        }
     }
     return;
 >]
