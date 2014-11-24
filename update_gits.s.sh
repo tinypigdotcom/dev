@@ -114,9 +114,6 @@ echo -n "Finished "
 date +'%F %T'
 echo
 
-
-echo "replace this with code"
-
 # <- END_OF_CODE
 # <- $VAR1 = {
 # <-     VERSION => '1.0.9',

@@ -806,8 +806,6 @@ sub main {
     return 0;
 }
 
-print "replace this with code";
-
 # <- END_OF_CODE
 
 # <- $VAR1 = {
