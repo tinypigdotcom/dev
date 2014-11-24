@@ -25,7 +25,12 @@ if ( !@ARGV ) {
     do_short_usage();
 }
 
-my $infile = shift @ARGV;
+my $infile = shift @ARGV || '';
+
+if ( ! -f $infile ) {
+    errout("file $infile not found");
+}
+
 my $outfile = $infile;
 
 if ( $outfile =~ /\.s\.([^.]*)$/ ) {
@@ -141,7 +146,7 @@ my $mode = 0700; chmod $mode, $outfile;
 # <- END_OF_CODE
 
 # <- $VAR1 = {
-# <-     VERSION => '0.0.4',
+# <-     VERSION => '0.0.5',
 # <-     purpose => 'build programs from template',
 # <-     params  => 'file',
 # <-     example => 'spiffy.s.pl',
