@@ -143,6 +143,7 @@ my $mode = 0700; chmod $mode, $outfile;
 # <- $VAR1 = {
 # <-     VERSION => '0.0.4',
 # <-     purpose => 'build programs from template',
+# <-     params  => 'file',
 # <-     example => 'spiffy.s.pl',
 # <-     CODE    => $code,
 # <-     target  => "mcc",
