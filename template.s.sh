@@ -16,7 +16,7 @@ echo "replace this with code"
 # <-                   exit => 'return',?
 # <-                   CODE => $code,
 # <-     top_comments_block => $top_comments_block,
-# <-                 target => "$ENV{HOME}/bin/af",
+# <-                 target => "$ENV{HOME}/bin/",
 # <-     options => [
 # <-         {
 # <-             long_switch => 'backdate=i',

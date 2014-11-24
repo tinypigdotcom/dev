@@ -15,7 +15,7 @@ print "replace this with code";
 # <-                example => '--backdate=3',
 # <-                   CODE => $code,
 # <-     top_comments_block => $top_comments_block,
-# <-                 target => "$ENV{HOME}/bin/elog",
+# <-                 target => "$ENV{HOME}/bin/",
 # <-     options => [
 # <-         {
 # <-             long_switch => 'backdate=i',
