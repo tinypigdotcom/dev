@@ -1,4 +1,6 @@
 #!/bin/bash
+#perl routine credit:
+#http://unix.stackexchange.com/questions/62950/getopt-getopts-or-manual-parsing-what-to-use-when-i-want-to-support-both-shor
 # Built from sh.t template
 # purpose: [< $purpose >]
 PERL=perl
