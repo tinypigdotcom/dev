@@ -1,6 +1,7 @@
 #!/bin/bash
 # Built from sh.t template
 # purpose: [< $purpose >]
+PERL=perl
 [< $exit ||= 'exit'; '' >]
 [< $LICENSE >]
 [< $top_comments_block >]
@@ -49,8 +50,8 @@ u_do_cleanup() {
 [<
     for (@options) {
         next if $_->{skip_case};
-        my $var = 'u_OPT_' . uc($_->{varname});
-        $OUT .= "    unset $var\n"
+        $_->{var} = "u_opt_$_->{varname}";
+        $OUT .= "    unset $_->{var}\n"
     }
     return;
 >]
@@ -160,8 +161,7 @@ u_version() {
 
 [<
     for (@options) {
-        my $var = 'OPT_' . uc($_->{varname});
-        $out .= "$var=$_->{init}\n";
+        $out .= "$_->{var}=$_->{init}\n";
     }
     $single_keys='';
     @long_opts=();
@@ -178,48 +178,53 @@ u_version() {
     return;
 >]
 
-u_OPTS=`getopt -o [< $single_keys >] -l '[< $long_opts >]' -- "$@"`
-if [ $? != 0 ]; then
-    u_short_usage
-    u_EXIT_STATUS=$u_ERR_EXIT
-    u_do_exit
-fi
+parsed_ops=$(
+  $PERL -MGetopt::Long -le '
+    Getopt::Long::Configure ("bundling");
 
-eval set -- "$u_OPTS"
-
-while [ $# -gt 0 ]
-do
-    case "$1" in
-               -h) u_do_short_usage
-                   ;;
-           --help) u_usage
-                   u_do_exit
-                   ;;
-   -v | --version) u_version
-                   u_do_exit
-                   ;;
-
+    my @options = (
 [<
     for (@options) {
-        next if $_->{skip_case};
-        my $var = 'u_OPT_' . uc($_->{varname});
-        my $ext = '';
-        if ( $_->{has_arg} ) {
-            $ext = "; ${var}_ARG=\$2; shift";
-        }
-        $OUT .= sprintf(" %17s $var=1$ext\n", "-$_->{one_key} | --$_->{varname})");
-        $OUT .= "                   ;;\n";
+        $OUT .= qq{        "$_->{long_switch}",\n};
     }
     return;
 >]
-               --) shift
-                   break
-                   ;;
-                *) u_errout "Invalid option: $1"
-                   ;;
-    esac
-    shift
-done
+    );
+
+    # Explicitly add single letter version of each option to allow bundling
+    my @temp = @options;
+    for my $letter (@temp) {
+        $letter =~ s/(\w)\w*/$1/;
+        next if $letter eq q{h};
+        push @options, $letter;
+    }
+    # Fix-ups from previous routine
+    push @options, q{h};
+
+    Getopt::Long::Configure "bundling";
+    $q = "'\''";
+    GetOptions(@options) or exit 1;
+    for ( map /(\w+)/, @options ) {
+        eval "\$o=\$opt_$_";
+        $o =~ s/$q/$q\\$q$q/g;
+        print "u_opt_$_=$q$o$q";
+    }' -- "$@"
+) || u_do_exit
+eval "$parsed_ops"
+
+if [ -n "$u_opt_h" ]; then
+    u_do_short_usage
+fi
+
+if [ -n "$u_opt_help" ]; then
+    u_usage
+    u_do_exit
+fi
+
+if [ -n "$u_opt_v$u_opt_version" ]; then
+    u_version
+    u_do_exit
+fi
 
 if [ -n "$u_EXIT" ]; then
     [< $exit >] $u_EXIT_STATUS
