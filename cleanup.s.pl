@@ -82,7 +82,7 @@ exit $rc;
 
 # <- $VAR1 = {
 # <-     VERSION => '0.0.1',
-# <-     purpose => '',
+# <-     purpose => 'clean up files from home directory',
 # <-     example => '',
 # <-     CODE    => $code,
 # <-     target  => "$ENV{HOME}/bin/cleanup",
