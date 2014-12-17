@@ -34,7 +34,7 @@ else
 fi
 echo
 
-if [ -n "$u_OPT_REBUILD" ]; then
+if [ -n "$u_opt_r$u_opt_rebuild" ]; then
     REASON="forced via command line switch '-r'"
 fi
 
