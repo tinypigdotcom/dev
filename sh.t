@@ -47,7 +47,6 @@ u_do_cleanup() {
     unset u_PROG
     unset u_EXIT
     unset u_ERR_EXIT
-    unset u_EXIT_STATUS
     unset u_OPTS
 [<
     for (@options) {
