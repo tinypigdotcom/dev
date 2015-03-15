@@ -3,7 +3,7 @@
 
 set -x
 cp ~/.vim/_vimrc ~/.vimrc
-cp ~/utility/_bash_profile ~/.bash_profile
+cp ~/utility/_bashrc ~/.bashrc
 
 # <- END_OF_CODE
 # <- $VAR1 = {
