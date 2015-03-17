@@ -103,8 +103,8 @@ done <$GITLIST
 
 cmp $HOME/.vimrc $HOME/.vim/_vimrc
 diff $HOME/.vimrc $HOME/.vim/_vimrc
-cmp $HOME/.bash_profile $HOME/utility/_bash_profile
-diff $HOME/.bash_profile $HOME/utility/_bash_profile
+cmp $HOME/.bashrc $HOME/utility/_bashrc
+diff $HOME/.bashrc $HOME/utility/_bashrc
 
 echo
 cd $HOME/tests;./tt
@@ -116,7 +116,7 @@ echo
 
 # <- END_OF_CODE
 # <- $VAR1 = {
-# <-     VERSION => '1.1.0',
+# <-     VERSION => '1.1.1',
 # <-     purpose => 'update all git directories on this system',
 # <-     params => '[OPTION]...',
 # <-     example => '-r',
