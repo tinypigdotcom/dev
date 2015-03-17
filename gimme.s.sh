@@ -7,8 +7,8 @@ cp ~/utility/_bashrc ~/.bashrc
 
 # <- END_OF_CODE
 # <- $VAR1 = {
-# <-     VERSION => '0.0.2',
-# <-     purpose => 'to update local .vimrc and .bash_profile',
+# <-     VERSION => '0.0.3',
+# <-     purpose => 'to update local .vimrc and .bashrc',
 # <-     params  => '',
 # <-     example => '',
 # <-     CODE    => $code,
