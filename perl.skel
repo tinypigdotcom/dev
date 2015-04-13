@@ -7,7 +7,7 @@ use warnings FATAL => 'all';
 use Data::Dumper;
 
 sub function1 {
-    print "I am a.pl\n";
+    print "I am new_perl_script\n";
 }
 
 sub main {
