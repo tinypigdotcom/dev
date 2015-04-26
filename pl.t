@@ -4,7 +4,7 @@
 
 [< $LICENSE >]
 [< $top_comments_block >]
-use 5.16.0;
+use strict;
 use warnings FATAL => 'all';
 
 use File::Basename;
