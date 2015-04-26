@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 # <- my $code = <<'END_OF_CODE';
 
-use 5.16.0;
+use strict;
+use warnings;
 
 use Carp;
 use Data::Dumper;
