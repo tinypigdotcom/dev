@@ -19,6 +19,10 @@ sub compare {
     my @files = @_;
     my %val1 = map { $_ => 1 } get_file_lines($files[0]);
     my %val2 = map { $_ => 1 } get_file_lines($files[1]);
+    print "\nCommon: \n";
+    for (sort { $a cmp $b } keys %val1) {
+        print "$_\n" if $val2{$_};
+    }
     print "\nIn $files[0], not in $files[1]:\n";
     for (sort { $a cmp $b } keys %val1) {
         print "$_\n" unless $val2{$_};
@@ -44,7 +48,7 @@ exit $rc;
 # <- END_OF_CODE
 
 # <- $VAR1 = {
-# <-                VERSION => '0.0.1',
+# <-                VERSION => '0.0.2',
 # <-                purpose => 'diff two files like they were hashes',
 # <-                 params => 'FILE1 FILE2',
 # <-                example => 'old_coords.txt new_coords.txt',
