@@ -10,14 +10,13 @@ OUTFILE=$HOME/data/full.cat
 if [ -n "$u_opt_r$u_opt_rebuild" ]; then
     echo "Rebuilding index..." >&2
     find /cygdrive >$OUTFILE
+else
+    grep -i "$*[^/]*$" $OUTFILE | less -FX
 fi
-
-grep -i "$*[^/]*$" $OUTFILE | less -FX
-
 
 # <- END_OF_CODE
 # <- $VAR1 = {
-# <-     VERSION => '1.1.5',
+# <-     VERSION => '1.1.6',
 # <-     purpose => 'locate file on local machine',
 # <-     params  => 'FILENAME_PART',
 # <-     example => 'menu.h',
