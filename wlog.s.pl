@@ -43,7 +43,7 @@ my $previous_dt = DateTime->new(
     year      => $current_year,
     month     => $current_month,
     day       => $current_day,
-    hour      => 10,
+    hour      => 9,
     minute    => 00,
     second    => 00,
     time_zone => 'floating',
@@ -56,8 +56,8 @@ opendir( my $dh, $some_dir ) || die "can't opendir $some_dir: $!";
 my @files = grep { /^\wl/ && -f "$some_dir/$_" } readdir($dh);
 closedir $dh;
 
-my $previous_work_item = 'begin';
-print "${mdy}10:00:00...begin\n";
+my $previous_work_item = 'off';
+print "${mdy}09:00:00...off\n";
 
 my $ofh = IO::File->new( "$ENV{HOME}/a.wlog", '>' );
 die if ( !defined $ofh );
@@ -95,7 +95,7 @@ for my $file (@files) {
         );
 
         $dur = $item_dt - $previous_dt;
-        duration_add( \$wi{$previous_work_item}, \$dur );
+        duration_add( \$wi{$previous_work_item}, \$dur, $previous_work_item );
 
         $previous_dt = $item_dt;
 
@@ -116,24 +116,43 @@ $item_dt = DateTime->new(
 );
 
 $dur = $item_dt - $previous_dt;
-duration_add( \$wi{$previous_work_item}, \$dur );
+duration_add( \$wi{$previous_work_item}, \$dur, $previous_work_item );
 
 my $hms = sprintf "%02d:%02d:%02d", $current_hour, $current_minutes,
   $current_seconds;
 output("${mdy}$hms...end\n\n");
 
-for my $key ( keys %wi ) {
+output("TASKS\n");
+output("-----------------------------------------------------------------\n");
+my %sub;
+for my $key ( sort { $a cmp $b } keys %wi ) {
+    next if $key =~ /off\b/;
+    my $subcat;
+    if ( $key =~ /(\w+)/ ) {
+        $subcat = $1;
+        dur_add(\$sub{$subcat}, \$wi{$key});
+    }
     output( $dfd->format_duration( $wi{$key} ), " $key\n" );
 }
 
+output("\nCATEGORIES\n");
 output("-----------------------------------------------------------------\n");
-output( $dfd->format_duration($total_worked), " TOTAL\n" );
+for my $key ( sort { $a cmp $b } keys %sub ) {
+    next if $key =~ /off\b/;
+    output( $dfd->format_duration( $sub{$key} ), " $key\n" );
+}
+
+output("\nTOTAL\n");
+output("-----------------------------------------------------------------\n");
+output( $dfd->format_duration($total_worked), "\n" );
 
 $ofh->close;
 
 sub duration_add {
-    my ( $item_total, $plus ) = @_;
-    dur_add( \$total_worked, $plus );
+    my ( $item_total, $plus, $work_item ) = @_;
+    if ($work_item !~ /^off\b/ ) {
+        dur_add( \$total_worked, $plus );
+    }
     dur_add( $item_total,    $plus );
 }
 
@@ -158,7 +177,7 @@ sub output {
 # <- END_OF_CODE
 
 # <- $VAR1 = {
-# <-     VERSION => '1.14',
+# <-     VERSION => '1.15',
 # <-     purpose => 'print time card',
 # <-     params  => '',
 # <-     example => '',
