@@ -36,10 +36,35 @@ sub directory_read {
     my @bins = grep { /^bin\d?/ && -d "$target/$_" } get_directory($target);
 }
 
+sub write_file {
+    use IO::File;
+    my ($filename, $contents) = @_;
+    my $ofh = IO::File->new($filename, '>');
+    die if (!defined $ofh);
+
+    print $ofh $contents;
+    $ofh->close;
+}
+
+sub file_contents {
+    use IO::File;
+    my $filename = shift;
+
+    my $ifh = IO::File->new($filename, '<');
+    die if (!defined $ifh);
+
+    $ifh->binmode();
+
+    my $contents = do { local $/; <$ifh> };
+
+    $ifh->close;
+
+    return $contents;
+}
 
 sub file_slurp {
     my $fh;
-    my $contents = do { local $/; <$fh> }
+    my $contents = do { local $/; <$fh> };
 }
 
 
