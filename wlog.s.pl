@@ -82,7 +82,8 @@ for my $file (@files) {
     if (    $current_month == $item_month
         and $current_day == $item_day
         and $current_year == $item_year
-        and $work_item ne $previous_work_item )
+        and $work_item ne $previous_work_item
+        and $work_item !~ /^lock/ )
     {
         $item_dt = DateTime->new(
             year      => $item_year,
