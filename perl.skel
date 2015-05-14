@@ -48,6 +48,7 @@ sub write_file {
 
 sub file_contents {
     use IO::File;
+    return unless defined wantarray;
     my $filename = shift;
 
     my $ifh = IO::File->new($filename, '<');
@@ -55,11 +56,15 @@ sub file_contents {
 
     $ifh->binmode();
 
-    my $contents = do { local $/; <$ifh> };
+    my @contents;
+    while (my $line = <$ifh>) {
+        $line =~ s/[\x0a\x0d]//g if wantarray;
+        push @contents, $line;
+    }
 
     $ifh->close;
 
-    return $contents;
+    return wantarray ? @contents : "@contents";
 }
 
 sub file_slurp {
