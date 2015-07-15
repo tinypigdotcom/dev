@@ -12,6 +12,7 @@ use IO::File;
 
 my $yesterday; #->
 my $backdate;  #->
+my $sysmsg;  #->
 
 if ( $yesterday ) {
     $backdate = 1;
@@ -36,8 +37,6 @@ my $file_path = '/cygdrive/c/TuSC/file';
 opendir( my $dh, $file_path ) || die "can't opendir $file_path: $!";
 my @files = grep { /^\wl/ && -f "$file_path/$_" } readdir($dh);
 closedir $dh;
-
-my $previous_work_item = 'deadbeef';
 
 my $elog_file = "$ENV{HOME}/.tmp.elog";
 my $ofh = IO::File->new( $elog_file, '>' );
@@ -93,6 +92,7 @@ sub datetime_to_file {
     return $basefile;
 }
 
+my $previous_work_item = 'deadbeef';
 my @remove;
 for my $file (@files) {
     my ($item_month,
@@ -119,9 +119,13 @@ for my $file (@files) {
         and $current_day == $item_day
         and $current_year == $item_year )
     {
-        output("$item_hour:$item_minute:$item_second...$work_item\n");
+        if ( $work_item ne $previous_work_item and ($sysmsg or $work_item !~ /^sysmsg/) ) {
+            output("$item_hour:$item_minute:$item_second...$work_item\n");
+            $previous_work_item = $work_item;
+        }
         push @remove, $full_path;
     }
+
 }
 
 $ofh->close;
@@ -188,6 +192,12 @@ $ifh->close;
 # <-             long_switch => 'yesterday',
 # <-             short_desc  => 'yesterday',
 # <-             long_desc   => "edit yesterday's data instead of today's",
+# <-             init        => '0',
+# <-         },
+# <-         {
+# <-             long_switch => 'sysmsg',
+# <-             short_desc  => 'sysmsg',
+# <-             long_desc   => "include sysmsg events",
 # <-             init        => '0',
 # <-         },
 # <-     ],

@@ -83,7 +83,7 @@ for my $file (@files) {
         and $current_day == $item_day
         and $current_year == $item_year
         and $work_item ne $previous_work_item
-        and $work_item !~ /^lock/ )
+        and $work_item !~ /^sysmsg/ )
     {
         $item_dt = DateTime->new(
             year      => $item_year,
