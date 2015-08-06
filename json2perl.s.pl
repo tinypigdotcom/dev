@@ -26,7 +26,7 @@ exit $rc;
 # <- END_OF_CODE
 
 # <- $VAR1 = {
-# <-                VERSION => '0.0.1',
+# <-                VERSION => '0.0.2',
 # <-                purpose => 'convert JSON to perl data structure',
 # <-                 params => '',
 # <-                example => '--pretty',

@@ -25,7 +25,7 @@ exit $rc;
 # <- END_OF_CODE
 
 # <- $VAR1 = {
-# <-                VERSION => '0.0.1',
+# <-                VERSION => '0.0.2',
 # <-                purpose => 'convert perl Dumper data structure to JSON',
 # <-                 params => '',
 # <-                example => '--pretty',

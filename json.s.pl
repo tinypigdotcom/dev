@@ -30,7 +30,7 @@ exit $rc;
 # <- END_OF_CODE
 
 # <- $VAR1 = {
-# <-                VERSION => '0.0.1',
+# <-                VERSION => '0.0.2',
 # <-                purpose => 'verify and nicely format JSON',
 # <-                 params => '',
 # <-                example => '--ugly',
