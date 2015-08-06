@@ -10,7 +10,7 @@ $Data::Dumper::Indent=0;
 sub main {
     my @argv = @_;
     my $json = JSON->new->allow_nonref;
-    my $json_input = do { local $/; <STDIN> };
+    my $json_input = multi_input();
     if ( $pretty ) {
         $Data::Dumper::Indent=2;
     }

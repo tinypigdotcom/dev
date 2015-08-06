@@ -8,7 +8,7 @@ sub main {
     my @argv = @_;
     my $VAR1;
     my $json = JSON->new->allow_nonref;
-    my $dumper_output = do { local $/; <STDIN> };
+    my $dumper_output = multi_input();
     eval $dumper_output;
     if ( $pretty ) {
         $json = $json->pretty;
