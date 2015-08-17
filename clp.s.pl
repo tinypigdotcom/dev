@@ -7,7 +7,7 @@ sub main {
     my @argv = @_;
     my $input = multi_input();
     print "$input\n";
-    my $cfh = IO::File->new('/dev/clipboard', '>');
+    my $cfh = IO::File->new("$ENV{HOME}/a.in", '>');
     if (defined $cfh) {
         print $cfh $input;
         $cfh->close;
@@ -22,7 +22,7 @@ exit $rc;
 # <- END_OF_CODE
 
 # <- $VAR1 = {
-# <-                VERSION => '0.0.2',
+# <-                VERSION => '0.0.3',
 # <-                purpose => 'put whatever in clipboard',
 # <-                 params => '',
 # <-                example => '',
