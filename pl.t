@@ -7,6 +7,8 @@
 use strict;
 use warnings FATAL => 'all';
 
+BEGIN { $| = 1 }
+
 use File::Basename;
 use Getopt::Long;
 
