@@ -57,7 +57,14 @@ fi
 
 while read a
 do
-    cd "$a/.."
+    target_dir=$a
+    cd $target_dir 2>/dev/null
+    current_dir=`pwd`
+    if [ "$target_dir" != "$current_dir" ]; then
+        echo "!!! $target_dir is missing !!!"
+        continue
+    fi
+    cd ..
     mv upd_skip $SKIPFILE 2>/dev/null # remove after all upgraded
 
     if [ -f $SKIPFILE ]; then
@@ -89,7 +96,7 @@ do
                 echo "$status"
             fi
         else
-            echo "**** $a "
+            echo "!!! $a !!!"
             if [ -n "$status" ]; then
                 echo "$status"
             fi
