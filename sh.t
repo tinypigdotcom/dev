@@ -211,6 +211,13 @@ parsed_ops=$(
         print "u_opt_$_=$q$o$q";
     }' -- "$@"
 ) || u_do_exit
+# shift away anything that's an option
+while (($#)); do
+    if [[ $1 =~ ^[^-] ]] ; then
+        break
+    fi
+    shift
+done
 eval "$parsed_ops"
 
 if [ -n "$u_opt_h" ]; then
