@@ -10,7 +10,6 @@
 
 # DONE
 # * implement "library" like notebook in evernote (sort of)
-# * -1 and -2 switch for which note file to use
 # * Implement word option
 # * allow for title search
 # <- END_OF_COMMENTS
@@ -19,43 +18,63 @@
 use strict;
 use warnings FATAL => 'all';
 
+use Clipboard;
 use Data::Dumper;
 use File::Basename;
 use Getopt::Long;
 use IO::File;
 
-my $nf = $ENV{NOTEFILES} || "$ENV{HOME}/info/notes.txt";
+my $nf = $ENV{NOTEFILES} || "$ENV{HOME}/.notes";
 my @notefiles = split ':', $nf;
+
+sub which_notefile {
+    my $pattern = shift || '';
+
+    # No pattern specified, use default
+    if ( !$pattern ) {
+        return @notefiles;
+    }
+    my @found_notefiles = grep { /$pattern/i } @notefiles;
+    if ( @found_notefiles > 1 ) {
+        die qq{Ambiguous file specification "$pattern"};
+    }
+    elsif ( @found_notefiles < 1 ) {
+        die qq{No file found for pattern "$pattern"};
+    }
+    else {
+        return $found_notefiles[0];
+    }
+}
 
 my $threshold = 10;
 
 my $separator = "%%%\n";
 
-@notefiles = $notefiles[0] if $one;
-@notefiles = $notefiles[1] if $two;
+@notefiles = which_notefile($file);
 
 sub edit_notes {
     my $editor = $ENV{EDITOR} || 'vim';
-    my $paths = join(' ', @notefiles);
+    my $paths = join( ' ', @notefiles );
     system("$editor $paths");
 }
 
 my @output_lines;
+
 sub output {
-    my $output_line = join('',@_);
+    my $output_line = join( '', @_ );
     push @output_lines, $output_line;
 }
 
 sub search_note {
     my (@patterns) = @_;
 
-    if ( $word ) {
+    if ($word) {
         for (@patterns) {
             $_ = "\\b$_\\b";
         }
     }
 
-    if ( $title ) {
+    if ($title) {
         for (@patterns) {
             $_ = "^[^\\x0a\\x0d]*$_";
         }
@@ -64,22 +83,22 @@ sub search_note {
     my @notes;
     for my $file (@notefiles) {
         my $ifh = IO::File->new( $file, '<' );
-        die if ( !defined $ifh );
+        die "Can't open $file: $!" if !defined $ifh;
 
         my $contents = do { local $/; <$ifh> };
 
         $ifh->close;
-        push @notes, split(/^$separator/m, $contents);
+        push @notes, split( /^$separator/m, $contents );
     }
 
     my %matches;
     my %excluded;
-    my $total_excluded=0;
-    OUTER: for (@notes) {
+    my $total_excluded = 0;
+  OUTER: for (@notes) {
         for my $pattern (@patterns) {
             next OUTER unless /$pattern/i;
         }
-        if ( /^[^\x0a\x0d]*library:(\S*)/ ) {
+        if (/^[^\x0a\x0d]*library:(\S*)/) {
             my $note_lib = $1;
             if ( $library ne $note_lib ) {
                 $excluded{$note_lib}++;
@@ -88,7 +107,7 @@ sub search_note {
             }
         }
         else {
-            if ( $library ) {
+            if ($library) {
                 $excluded{no_library}++;
                 $total_excluded++;
                 next OUTER;
@@ -99,7 +118,6 @@ sub search_note {
     }
     my $output_separator = "\n" . '+' . '=' x 78 . "\n|";
     my $title_separator  = "\n" . '+' . '-' x 68 . "\n";
-    my $gpg_file = "$ENV{HOME}/.note.gpg";
     if (%matches) {
         my $total_matches = scalar keys %matches;
         if ( $total_matches > $threshold ) {
@@ -111,39 +129,19 @@ sub search_note {
             }
         }
         my $content;
-        for my $match (keys %matches) {
+        for my $match ( keys %matches ) {
             my @lines = split "\n", $match;
             my $title = shift @lines;
             $title =~ s/^\s*//;
             my $body = join "\n", @lines;
             $body =~ s/\s*$//s;
-            output $output_separator,
-                   " $title",
-                   $title_separator;
-            $content='';
-            if ($body =~ s/[[]<(.*)>[]]/$1/sg) {
+            output $output_separator, " $title", $title_separator;
+            $content = '';
+            if ( $body =~ s/[[]<(.*)>[]]/$1/sg ) {
                 $content = $1;
-                print "content {$content}\n";
             }
-            if ($body =~ /BEGIN PGP MESSAGE.*END PGP MESSAGE/s) {
-                my $ofh = IO::File->new($gpg_file, '>');
-                die if (!defined $ofh);
-                $body =~ s/^ *//mg;
-                print $ofh $body;
-                $ofh->close;
-                if ( -r $gpg_file ) {
-                    system("gpg --decrypt $gpg_file && rm $gpg_file");
-                }
-            }
-            else {
-                output $body, "\n";
-                my $cfh = IO::File->new('/dev/clipboard', '>');
-                if (defined $cfh) {
-                    my $to_copy = $content || $body;
-                    print $cfh $to_copy;
-                    $cfh->close;
-                }
-            }
+            output $body, "\n";
+            Clipboard->copy($content || $body);
         }
         output "\n";
     }
@@ -159,7 +157,8 @@ sub search_note {
         }
         output ")\n";
     }
-    open O, '| less -FX' or die;
+    my $pager = $ENV{PAGER} || 'less -FX';
+    open O, "| $pager" or die;
     print O @output_lines;
     close O;
 
@@ -168,12 +167,12 @@ sub search_note {
 
 sub add_note {
     my $note;
-    while (my $input_line = <STDIN>) {
+    while ( my $input_line = <STDIN> ) {
         $note .= $input_line;
     }
 
     my $ofh = IO::File->new( $notefiles[0], '>>' );
-    die if ( !defined $ofh );
+    die "Can't open $notefiles[0]: $!" if !defined $ofh;
 
     print $ofh "${separator}${note}\n";
     $ofh->close;
@@ -185,12 +184,12 @@ sub add_note {
 sub main {
     my (@patterns) = @_;
 
-    if    ($add)      { return add_note()               }
-    elsif ($edit)     { return edit_notes()             }
-    elsif (@patterns) { return search_note( @patterns ) }
-    else              { return do_short_usage()         }
+    if    ($add)      { return add_note() }
+    elsif ($edit)     { return edit_notes() }
+    elsif (@patterns) { return search_note(@patterns) }
+    else              { return do_short_usage() }
 
-    die "Boom."; # This code should never be reached
+    die "Boom.";    # This code should never be reached
     return;
 }
 
@@ -202,7 +201,7 @@ exit $rc;
 # <- END_OF_CODE
 
 # <- $VAR1 = {
-# <-                VERSION => '0.9.7',
+# <-                VERSION => '0.10.0',
 # <-                purpose => 'quickly store and retrieve small pieces of information',
 # <-                 params => '[OPTION]... PATTERN..',
 # <-                example => '-2w lawnmower',
@@ -211,24 +210,16 @@ exit $rc;
 # <-                 target => "$ENV{HOME}/bin/note",
 # <-     options => [
 # <-         {
+# <-             long_switch => 'file=s',
+# <-              short_desc => 'file=FILE',
+# <-               long_desc => 'Search a specific file',
+# <-                    init => "''",
+# <-         },
+# <-         {
 # <-             long_switch => 'library=s',
 # <-              short_desc => 'library=LIBRARY',
 # <-               long_desc => 'Search a specific library',
 # <-                    init => "''",
-# <-         },
-# <-         {
-# <-             long_switch => '1',
-# <-              short_desc => '1',
-# <-               long_desc => "use notefile #1",
-# <-                    init => '0',
-# <-                     var => 'one',
-# <-         },
-# <-         {
-# <-             long_switch => '2',
-# <-              short_desc => '2',
-# <-               long_desc => "use notefile #2",
-# <-                    init => '0',
-# <-                     var => 'two',
 # <-         },
 # <-         {
 # <-             long_switch => 'add',
