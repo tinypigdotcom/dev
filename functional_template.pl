@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # purpose: functional (vs class) template
 
 use strict;

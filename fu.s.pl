@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # <- my $code = <<'END_OF_CODE';
 
 use DMB::Random ':all';

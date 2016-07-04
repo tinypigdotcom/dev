@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # purpose: template for creating new scripts
 # maybe use warnings FATAL => 'all';
 

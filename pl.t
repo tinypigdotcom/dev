@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # Built from perl.t template
 # purpose: [< $purpose >]
 

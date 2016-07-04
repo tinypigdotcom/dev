@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # <- my $top_comments_block = <<'END_OF_COMMENTS';
 # These comments come first.
 # <- END_OF_COMMENTS
