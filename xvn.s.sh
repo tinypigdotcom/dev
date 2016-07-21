@@ -3,7 +3,7 @@
 
 set -x
 
-INBOX_PATH=/cygdrive/c/Dropbox/dmb/email
+INBOX_PATH=/cygdrive/c/shared/Dropbox/dmb/email
 OUTFILE="$INBOX_PATH/$*"
 
 cat >"$OUTFILE"
