@@ -15,6 +15,6 @@ cat >"$OUTFILE"
 # <-                 params => '',
 # <-                example => '',
 # <-                   CODE => $code,
-# <-                 target => "$ENV{HOME}/bin/xn",
+# <-                 target => "$ENV{HOME}/bin/xvn",
 # <- };
 
