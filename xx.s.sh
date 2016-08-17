@@ -6,6 +6,7 @@
 
 grep -iv $* $HOME/.stickies >>$HOME/.stickies2
 mv $HOME/.stickies2 $HOME/.stickies
+cls 2>/dev/null
 
 # <- END_OF_CODE
 # <- $VAR1 = {
