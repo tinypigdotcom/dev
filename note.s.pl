@@ -18,7 +18,7 @@
 use strict;
 use warnings FATAL => 'all';
 
-use Clipboard;
+# use Clipboard;
 use Data::Dumper;
 use File::Basename;
 use Getopt::Long;
@@ -141,7 +141,7 @@ sub search_note {
                 $content = $1;
             }
             output $body, "\n";
-            Clipboard->copy($content || $body);
+            # Clipboard->copy($content || $body);
         }
         output "\n";
     }
