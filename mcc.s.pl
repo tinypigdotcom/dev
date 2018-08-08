@@ -32,14 +32,18 @@ if ( ! -f $infile ) {
     errout("file $infile not found");
 }
 
+my $path = $infile;
+$path =~ s{/[^/]*$}{};
+
 my $outfile = $infile;
 
 if ( $outfile =~ /\.s\.([^.]*)$/ ) {
     $ext = $1;
 }
 
-if ( ! -f "$ext.t" ) {
-    errout("template $ext.t not found");
+my $template_file = "$path/$ext.t";
+if ( ! -f $template_file ) {
+    errout("template $template_file not found");
 }
 
 if ( $outfile =~ s/\.s\.${ext}$/\.${ext}/ ) {
@@ -78,7 +82,7 @@ my $open_delimiter  = '[<';
 my $close_delimiter = '>]';
 
 my $license_template = Text::Template->new(
-    SOURCE     => 'LICENSE.t',
+    SOURCE     => "$path/LICENSE.t",
     DELIMITERS => [ $open_delimiter, $close_delimiter ],
 ) or die "Couldn't construct template: $Text::Template::ERROR";
 
@@ -104,7 +108,7 @@ if (! defined $license_result) {
 }
 
 my $template = Text::Template->new(
-    SOURCE     => "${ext}.t",
+    SOURCE     => $template_file,
     DELIMITERS => [ $open_delimiter, $close_delimiter ],
 ) or die "Couldn't construct template: $Text::Template::ERROR";
 
