@@ -34,6 +34,9 @@ if ( ! -f $infile ) {
 
 my $path = $infile;
 $path =~ s{/[^/]*$}{};
+if ( $path eq $infile ) {
+    $path = './';
+}
 
 my $outfile = $infile;
 

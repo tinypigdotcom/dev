@@ -1,1 +1,6 @@
-README
+# Steps
+
+    $ ./mcc.s.pl mcc.s.pl
+    $ mv mcc ~/bin/
+    $ for a in *.s.*; do mcc $a; done # There will be a couple errors as template* files are processed
+
