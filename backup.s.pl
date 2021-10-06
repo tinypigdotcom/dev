@@ -44,6 +44,17 @@ sub get_directory {
     return @files;
 }
 
+sub get_subdirectory_files {
+    my @dirs = @_;
+    my $list = [];
+    find({ wanted => sub {
+        return if -d $File::Find::name;
+        push @$list, $File::Find::name;
+    }, no_chdir => 1 }, @dirs);
+
+    return $list;
+}
+
 sub timestamp {
     my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime(time);
 
@@ -93,7 +104,18 @@ sub backup_home {
     my $backup_filename = "$ENV{HOME}/backup." . timestamp();
     print "Creating archive $backup_filename...\n";
 
-    Archive::Tar->create_archive( "$backup_filename.tbz", COMPRESS_BZIP, @files );
+    my @full_files;
+    for my $file (@files) {
+        if (-d $file) {
+            my $list = get_subdirectory_files($file);
+            push @full_files, @$list;
+        }
+        else {
+            push @full_files, $file;
+        }
+    }
+
+    Archive::Tar->create_archive( "$backup_filename.tbz", COMPRESS_BZIP, @full_files );
 }
 
 sub main {
