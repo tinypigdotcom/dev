@@ -1,15 +1,16 @@
 #!/bin/bash
 # <- my $code = <<'END_OF_CODE';
 
-find . | grep "$@" 2>/dev/null
+set -x
+grep -R "$@" . 2>/dev/null | cut -c-180
 
 # <- END_OF_CODE
 # <- $VAR1 = {
 # <-     VERSION => '0.0.2',
-# <-     purpose => 'find file matching pattern from current directory',
+# <-     purpose => 'recursive grep at current directory',
 # <-     params  => '',
 # <-     example => '',
 # <-     CODE    => $code,
-# <-     target  => "$ENV{HOME}/bin/fgp",
+# <-     target  => "$ENV{HOME}/bin/gg",
 # <- };
 
