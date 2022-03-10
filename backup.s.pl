@@ -8,6 +8,7 @@ use Data::Dumper;
 use Filesys::DiskUsage qw(du);
 use IO::File;
 use Archive::Tar;
+use File::Find;
 
 # Backup: create tarball of essential parts of home directory for download
 
