@@ -13,7 +13,6 @@ sub function1 {
 
 sub main {
     my @argv = @_;
-    print Dumper(\@argv);
     function1();
     return;
 }
